@@ -7,7 +7,7 @@ using UnityStandardAssets.Characters.ThirdPerson;
 public class Brain : MonoBehaviour {
 
     public int DNALength = 1;
-    public float timeALive;
+    public float timeAlive;
     public DNA dna;
 
     private ThirdPersonCharacter m_Character;
@@ -27,7 +27,7 @@ public class Brain : MonoBehaviour {
     {
         dna = new DNA(DNALength, 6);
         m_Character = GetComponent<ThirdPersonCharacter>();
-        timeALive = 0;
+        timeAlive = 0;
         alive = true;
     }
 
@@ -39,7 +39,7 @@ public class Brain : MonoBehaviour {
 
         if (dna.GetGene(0) == 0) v = 1;
         else if (dna.GetGene(0) == 1) v = -1;
-        else if (dna.GetGene(0) == 2) v = -1;
+        else if (dna.GetGene(0) == 2) h = -1;
         else if (dna.GetGene(0) == 3) h = 1;
         else if (dna.GetGene(0) == 4) m_Jump = true;
         else if (dna.GetGene(0) == 5) crouch = true;
@@ -49,7 +49,7 @@ public class Brain : MonoBehaviour {
         m_Jump = false;
         if (alive)
         {
-            time
+            timeAlive += Time.deltaTime;
         }
     }
 }
