@@ -9,7 +9,7 @@ public class PopulationManager : MonoBehaviour {
     public GameObject botPrefab;
     public float trialTime = 10f;
 
-    private int populationSize = 3;
+    private int populationSize = 50;
     private List<GameObject> population = new List<GameObject>();
     private int generation = 0;
     private float elapsed = 0;
@@ -39,8 +39,15 @@ public class PopulationManager : MonoBehaviour {
         elapsed += Time.deltaTime;
         if(elapsed >= trialTime)
         {
+            //stop
+            Time.timeScale = 0;
+            for(int i = 0; i < population.Count; i++)
+            {
+                population[i].GetComponent<Brain>().Stop(InitialPoint.transform.position);
+            }
             BreedNewPopulation();
             elapsed = 0;
+            Time.timeScale = 1;
         }
 	}
 
@@ -49,10 +56,17 @@ public class PopulationManager : MonoBehaviour {
         List<GameObject> sortedList = population.OrderBy(o => o.GetComponent<Brain>().distance).ToList();
 
         population.Clear();
-        for(int i = (int)(sortedList.Count / 2f) - 1; i < population.Count; i++)
+        for(int i = 0; i < sortedList.Count; i++)
         {
-            population.Add(Breed(sortedList[i], sortedList[i - 1]));
-            population.Add(Breed(sortedList[i - 1], sortedList[i]));
+            if(i < sortedList.Count/2)
+            {
+                population.Add(Breed(sortedList[i], sortedList[i - 1], false));
+            }
+            else
+            {
+                population.Add(Breed(sortedList[i], sortedList[i - 1], true));
+
+            }
         }
 
         for(int i = 0; i < sortedList.Count; i++)
@@ -63,12 +77,13 @@ public class PopulationManager : MonoBehaviour {
         generation++;
     }
 
-    private GameObject Breed(GameObject parent1, GameObject parent2)
+    private GameObject Breed(GameObject parent1, GameObject parent2, bool shouldMutate)
     {
         GameObject offSpring = InstantiateBot();
+        Debug.Log(offSpring);
         Brain brain  = offSpring.GetComponent<Brain>();
 
-        if (Random.Range(0f,100f) < 1)
+        if (shouldMutate)
         {
             brain.Init();
             brain.dna.Mutate();

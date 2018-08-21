@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[SerializeField]
 public class DNA {
 
+    [SerializeField]
     public List<int> genes = new List<int>();
     public int maxLenght;
     public int maxValues;
@@ -33,7 +35,7 @@ public class DNA {
     {
         for(int i = 0; i < maxLenght; i++)
         {
-            if (i % 2 == 0)
+            if (i < maxLenght / 2)
             {
                 genes[i] = parent1.genes[i];
             }

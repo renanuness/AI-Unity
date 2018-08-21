@@ -5,12 +5,14 @@ using UnityEngine;
 public class Brain : MonoBehaviour {
 
     public LayerMask layer;
+    [SerializeField]
     public DNA dna;
     public float distance;
 
     private bool alive = true;
-    private int dnaLength = 2;
-    	
+    private int dnaLength = 100;
+    private int decision = 0;
+    
     public void Init()
     {
         dna = new DNA(dnaLength, 2);
@@ -24,16 +26,11 @@ public class Brain : MonoBehaviour {
     }
 
 	private void Update () {
-        if(!alive)
-        {
-            return;
-        }
         float v = 1;
         float h = 0;
-
-        if (FindObstacle())
+        if (decision == 0)
         {
-            if (dna.GetGene(1) == 1)
+            if(dna.GetGene(0) == 1)
             {
                 h = 1;
             }
@@ -41,10 +38,59 @@ public class Brain : MonoBehaviour {
             {
                 h = -1;
             }
+            transform.Rotate(0, h * 90, 0);
+            decision++;
+            return;
         }
 
-        transform.Translate(0, 0, v * 0.1f);
-        transform.Rotate(0, h, 0);
+        if (FindObstacle())
+        {
+            if(dna.GetGene(decision%100) == 1)
+            {
+                h = 1;
+            }
+            else
+            {
+                h = -1;
+            }
+            //if (decision % 2 == 0)
+            //{
+
+            //    if (dna.GetGene(1) == 1)
+            //    {
+            //        h = 1;
+            //    }
+            //    else
+            //    {
+            //        h = -1;
+            //    }
+            //}
+            //else
+            //{
+            //    if (dna.GetGene(0) == 1)
+            //    {
+            //        h = 1;
+            //    }
+            //    else
+            //    {
+            //        h = -1;
+            //    }
+            //}
+            decision++;
+        }
+        else
+        {
+            h = 0;
+        }
+
+        if(h != 0)
+        {
+            transform.Rotate(0, h * 90, 0);
+        }
+        else
+        {
+            transform.Translate(0, 0, v * 0.1f);
+        }
     }
 
     private bool FindObstacle()
