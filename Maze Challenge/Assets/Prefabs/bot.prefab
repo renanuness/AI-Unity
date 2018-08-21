@@ -112,6 +112,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eecbc5e552b874f8609c17d4db5ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!136 &136215400629822148
 CapsuleCollider:
   m_ObjectHideFlags: 1

@@ -4,39 +4,58 @@ using UnityEngine;
 
 public class Brain : MonoBehaviour {
 
-    private DNA dna;
+    public LayerMask layer;
+    public DNA dna;
+    public float distance;
+
     private bool alive = true;
     private int dnaLength = 2;
-    private float timeAlive;
     	
     public void Init()
     {
-        dna = new DNA(2, 2);
-        timeAlive = 0;
+        dna = new DNA(dnaLength, 2);
+        distance = 0;
         alive = true;
     }
 
-	void Update () {
+    public void Stop(Vector3 initialPos)
+    {
+        distance = Vector3.Distance(transform.position, initialPos);
+    }
 
-
+	private void Update () {
         if(!alive)
         {
             return;
         }
-        float v = 0;
+        float v = 1;
         float h = 0;
 
-        if(dna.GetGene(0) == 1)
+        if (FindObstacle())
         {
-            v = 1;
-        }
-
-        if (dna.GetGene(1) == 1)
-        {
-            h = 1;
+            if (dna.GetGene(1) == 1)
+            {
+                h = 1;
+            }
+            else
+            {
+                h = -1;
+            }
         }
 
         transform.Translate(0, 0, v * 0.1f);
         transform.Rotate(0, h, 0);
     }
+
+    private bool FindObstacle()
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, transform.forward, out hit, 2f, layer, QueryTriggerInteraction.Collide))
+        {
+            Debug.Log(hit.collider);
+            return true;
+        }
+        return false;
+    }
+
 }
