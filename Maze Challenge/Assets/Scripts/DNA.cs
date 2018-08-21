@@ -12,6 +12,7 @@ public class DNA {
     {
         maxLenght = l;
         maxValues = v;
+        SetRandom();
     }
 
     public void SetRandom()
@@ -19,7 +20,7 @@ public class DNA {
         genes.Clear();
         for(int i = 0; i < maxLenght; i++)
         {
-            genes[i] = Random.Range(0, maxValues);
+            genes.Add(Random.Range(0, maxValues));
         }
     }
 
