@@ -57,6 +57,7 @@ public class PopulationManager : MonoBehaviour {
 
         for(int i = 0; i < sortedList.Count; i++)
         {
+            Debug.Log("das");
             Destroy(sortedList[i]);
         }
         generation++;
