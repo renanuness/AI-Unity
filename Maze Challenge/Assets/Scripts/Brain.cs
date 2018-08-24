@@ -8,58 +8,90 @@ public class Brain : MonoBehaviour {
     [SerializeField]
     public DNA dna;
     public float distance;
-
-    private bool seeWall;
     private bool alive = true;
     private int dnaLength = 100;
-    
+    private int decision = 0;
+    private float timeToTurn = .5f;
+    private float timeWalking = 0f;
+
+
     public void Init()
     {
-        dna = new DNA(dnaLength, 360);
+        dna = new DNA(dnaLength, 3);
         distance = 0;
+        decision = 0;
         alive = true;
+        timeWalking = 0;
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.tag == "bounds")
-        {
-            alive = false;
-            Debug.Log("das");
-        }
-    }
     public void Stop(Vector3 initialPos)
     {
         distance = Vector3.Distance(transform.position, initialPos);
     }
 
     private void Update() {
-        if (!alive)
-        {
-            Stop(PopulationManager.GetInitialPosition());
-            return;
-        }
-        seeWall = false;
-        RaycastHit hit;
-        seeWall = (Physics.Raycast(transform.position, transform.forward, out hit, .5f, layer));
-
-    }
-
-    private void FixedUpdate()
-    {
-        if (!alive)
-            return;
+        float v = 1;
         float h = 0;
-        float v = dna.GetGene(0);
-
-        if (seeWall)
+        timeWalking += Time.deltaTime;
+        if (decision > 99)
         {
-            h = dna.GetGene(1);
+            decision = 0;
         }
 
-        transform.Translate(0, 0, v * .001f);
-        transform.Rotate(0, h, 0);
+        if (decision == 0)
+        {
+            if(dna.GetGene(decision) == 1)
+            {
+                h = 1;
+            }
+            else
+            {
+                h = -1;
+            }
+            transform.Rotate(0, h * 90, 0);
+            decision++;
+            return;
+        }
+        if (timeWalking > timeToTurn)
+        {
+            timeWalking = 0;
+            if(dna.GetGene(decision) == 1)
+            {
+                h = 1;
+            }
+            else if(dna.GetGene(decision) == 0)
+            {
+                h = -1;
+            }
+            else
+            {
+                h = 0;
+            }
+            decision++;
+        }
+        else
+        {
+            h = 0;
+        }
+
+        if(h != 0)
+        {
+            transform.Rotate(0, h * 90, 0);
+        }
+        else
+        {
+            transform.Translate(0, 0, v * 0.1f);
+        }
     }
 
+    private bool FindObstacle()
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, transform.forward, out hit, .5f, layer, QueryTriggerInteraction.Collide))
+        {
+            return true;
+        }
+        return false;
+    }
 
 }
