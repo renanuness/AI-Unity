@@ -9,99 +9,57 @@ public class Brain : MonoBehaviour {
     public DNA dna;
     public float distance;
 
+    private bool seeWall;
     private bool alive = true;
     private int dnaLength = 100;
-    private int decision = 0;
     
     public void Init()
     {
-        dna = new DNA(dnaLength, 2);
+        dna = new DNA(dnaLength, 360);
         distance = 0;
         alive = true;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "bounds")
+        {
+            alive = false;
+            Debug.Log("das");
+        }
+    }
     public void Stop(Vector3 initialPos)
     {
         distance = Vector3.Distance(transform.position, initialPos);
     }
 
-	private void Update () {
-        float v = 1;
-        float h = 0;
-        if (decision == 0)
+    private void Update() {
+        if (!alive)
         {
-            if(dna.GetGene(0) == 1)
-            {
-                h = 1;
-            }
-            else
-            {
-                h = -1;
-            }
-            transform.Rotate(0, h * 90, 0);
-            decision++;
+            Stop(PopulationManager.GetInitialPosition());
             return;
         }
-
-        if (FindObstacle())
-        {
-            if(dna.GetGene(decision%100) == 1)
-            {
-                h = 1;
-            }
-            else
-            {
-                h = -1;
-            }
-            //if (decision % 2 == 0)
-            //{
-
-            //    if (dna.GetGene(1) == 1)
-            //    {
-            //        h = 1;
-            //    }
-            //    else
-            //    {
-            //        h = -1;
-            //    }
-            //}
-            //else
-            //{
-            //    if (dna.GetGene(0) == 1)
-            //    {
-            //        h = 1;
-            //    }
-            //    else
-            //    {
-            //        h = -1;
-            //    }
-            //}
-            decision++;
-        }
-        else
-        {
-            h = 0;
-        }
-
-        if(h != 0)
-        {
-            transform.Rotate(0, h * 90, 0);
-        }
-        else
-        {
-            transform.Translate(0, 0, v * 0.1f);
-        }
-    }
-
-    private bool FindObstacle()
-    {
+        seeWall = false;
         RaycastHit hit;
-        if(Physics.Raycast(transform.position, transform.forward, out hit, 2f, layer, QueryTriggerInteraction.Collide))
-        {
-            Debug.Log(hit.collider);
-            return true;
-        }
-        return false;
+        seeWall = (Physics.Raycast(transform.position, transform.forward, out hit, .5f, layer));
+
     }
+
+    private void FixedUpdate()
+    {
+        if (!alive)
+            return;
+        float h = 0;
+        float v = dna.GetGene(0);
+
+        if (seeWall)
+        {
+            h = dna.GetGene(1);
+        }
+
+        transform.Translate(0, 0, v * .001f);
+        transform.Rotate(0, h, 0);
+    }
+
 
 }

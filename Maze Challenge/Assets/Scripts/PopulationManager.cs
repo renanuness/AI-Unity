@@ -25,6 +25,11 @@ public class PopulationManager : MonoBehaviour {
         GUI.Label(new Rect(10, 50, 200, 30), string.Format("Generation: {0}", generation), guiStyle);
         GUI.EndGroup();
     }
+    public static Vector3 GetInitialPosition()
+    {
+        Vector3 pos = new Vector3(361.01f,34.8f,84.1f);
+        return pos;
+    }
 
 	private void Start () {
 		for(int i = 0; i < populationSize; i++)
@@ -40,50 +45,40 @@ public class PopulationManager : MonoBehaviour {
         if(elapsed >= trialTime)
         {
             //stop
-            Time.timeScale = 0;
             for(int i = 0; i < population.Count; i++)
             {
                 population[i].GetComponent<Brain>().Stop(InitialPoint.transform.position);
             }
             BreedNewPopulation();
             elapsed = 0;
-            Time.timeScale = 1;
         }
 	}
 
     private void BreedNewPopulation()
     {
         List<GameObject> sortedList = population.OrderBy(o => o.GetComponent<Brain>().distance).ToList();
-
+        int j = 1;
         population.Clear();
-        for(int i = 0; i < sortedList.Count; i++)
+        for(int i = (int) (sortedList.Count / 2f) - 1; i < sortedList.Count - 1; i++)
         {
-            if(i < sortedList.Count/2)
-            {
-                population.Add(Breed(sortedList[i], sortedList[i - 1], false));
-            }
-            else
-            {
-                population.Add(Breed(sortedList[i], sortedList[i - 1], true));
-
-            }
+            population.Add(Breed(sortedList[i], sortedList[i + 1]));
+            population.Add(Breed(sortedList[i + 1], sortedList[i]));
         }
 
         for(int i = 0; i < sortedList.Count; i++)
         {
-            Debug.Log("das");
+
             Destroy(sortedList[i]);
         }
         generation++;
     }
 
-    private GameObject Breed(GameObject parent1, GameObject parent2, bool shouldMutate)
+    private GameObject Breed(GameObject parent1, GameObject parent2)
     {
         GameObject offSpring = InstantiateBot();
-        Debug.Log(offSpring);
         Brain brain  = offSpring.GetComponent<Brain>();
 
-        if (shouldMutate)
+        if (Random.Range(0,100) == 10)
         {
             brain.Init();
             brain.dna.Mutate();

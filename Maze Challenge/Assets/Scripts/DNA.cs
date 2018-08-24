@@ -7,12 +7,12 @@ public class DNA {
 
     [SerializeField]
     public List<int> genes = new List<int>();
-    public int maxLenght;
+    public int dnaLenght;
     public int maxValues;
 
     public DNA(int l, int v)
     {
-        maxLenght = l;
+        dnaLenght = l;
         maxValues = v;
         SetRandom();
     }
@@ -20,7 +20,7 @@ public class DNA {
     public void SetRandom()
     {
         genes.Clear();
-        for(int i = 0; i < maxLenght; i++)
+        for(int i = 0; i < dnaLenght; i++)
         {
             genes.Add(Random.Range(0, maxValues));
         }
@@ -33,9 +33,9 @@ public class DNA {
 
     public void Combine(DNA parent1, DNA parent2)
     {
-        for(int i = 0; i < maxLenght; i++)
+        for(int i = 0; i < dnaLenght; i++)
         {
-            if (i < maxLenght / 2)
+            if (i < dnaLenght / 2)
             {
                 genes[i] = parent1.genes[i];
             }
@@ -48,7 +48,7 @@ public class DNA {
 
     public void Mutate()
     {
-        genes[Random.Range(0, maxLenght)] = Random.Range(0, maxValues);
+        genes[Random.Range(0, dnaLenght)] = Random.Range(0, maxValues);
     }
 
     public int GetGene(int pos)
