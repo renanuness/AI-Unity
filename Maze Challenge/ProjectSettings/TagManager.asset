@@ -6,6 +6,7 @@ TagManager:
   tags:
   - dead
   - wall
+  - bounds
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - PostProcessing
   - bot
   - wall
-  - 
+  - bounds
   - 
   - 
   - 
