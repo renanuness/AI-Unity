@@ -338,7 +338,7 @@ Transform:
   m_GameObject: {fileID: 709407724}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 44.43, y: 0, z: 0}
-  m_LocalScale: {x: 9.0625, y: 1, z: 1}
+  m_LocalScale: {x: 9.0625, y: 1, z: 5.9277}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -384,7 +384,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TrialTime: 10
-  populationSize: 50
+  populationSize: 100
   BotPrefab: {fileID: 1015851520969656, guid: fd679fe646ecc7a4d95f7adaeb18307d, type: 2}
   population: []
 --- !u!1 &1813719073
@@ -468,8 +468,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1813719073}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.69, z: 0}
-  m_LocalScale: {x: 9.0625, y: 1, z: 6.8434}
+  m_LocalPosition: {x: 43.2, y: -1.69, z: 0}
+  m_LocalScale: {x: 50.79834, y: 1, z: 21.609406}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4

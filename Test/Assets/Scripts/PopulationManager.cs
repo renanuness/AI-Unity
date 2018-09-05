@@ -7,15 +7,14 @@ public class PopulationManager : MonoBehaviour
 {
     public delegate void ClickAction();
     public static event ClickAction OnClicked;
-
     public float TrialTime;
     public int populationSize;
     public GameObject BotPrefab;
+    public List<GameObject> population = new List<GameObject>();
 
     private int generation = 0;
-    public List<GameObject> population = new List<GameObject>();
     private float elapsed;
-
+    private float average = 0;
 
     GUIStyle guiStyle = new GUIStyle();
     private void OnGUI()
@@ -27,6 +26,7 @@ public class PopulationManager : MonoBehaviour
         GUI.Label(new Rect(10, 25, 200, 30), "Gen: " + generation, guiStyle);
         GUI.Label(new Rect(10, 50, 200, 30), string.Format("Time: {0:00}", elapsed), guiStyle);
         GUI.Label(new Rect(10, 75, 200, 30), "Population: " + population.Count, guiStyle);
+        GUI.Label(new Rect(10, 100, 200, 30), "Avarege: " + average, guiStyle);
         GUI.EndGroup();
     }
 
@@ -43,14 +43,12 @@ public class PopulationManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     private void Update()
     {
         elapsed += Time.deltaTime;
         if (elapsed > TrialTime)
         {
             elapsed = 0;
-            //Chama o evento
             OnClicked();
             BreedNewPopulation();
         }
@@ -58,18 +56,22 @@ public class PopulationManager : MonoBehaviour
 
     private void BreedNewPopulation()
     {
-        List<GameObject> sortedList = population.OrderBy(o =>  o.GetComponent<Brain>().DistanceTraveled * 4).ToList();
+        List<GameObject> sortedList = population.OrderBy(o =>  -o.GetComponent<Brain>().Detour * 5 + o.GetComponent<Brain>().TimeAlive * 5 + o.GetComponent<Brain>().DistanceTraveled * 10).ToList();
+        CalculateAverage(sortedList);
 
+
+        int top = sortedList.Count - 1;
         population.Clear();
-        for (int i = (int)(6*sortedList.Count - 7)/7; i < sortedList.Count - 1; i++)
+
+        for (int i = (int)(6 * sortedList.Count - 1) / 7; i < sortedList.Count - 1; i++)
         {
             population.Add(Breed(sortedList[i], sortedList[i + 1]));
             population.Add(Breed(sortedList[i + 1], sortedList[i + 1]));
-            population.Add(Breed(sortedList[i], sortedList[i -1]));
-            population.Add(Breed(sortedList[i +  1], sortedList[i - 1]));
+            population.Add(Breed(sortedList[i], sortedList[i - 1]));
+            population.Add(Breed(sortedList[i + 1], sortedList[i - 1]));
             population.Add(Breed(sortedList[i - 1], sortedList[i + 1]));
-            population.Add(Breed(sortedList[i - 1], sortedList[i ]));
-
+            population.Add(Breed(sortedList[i - 1], sortedList[i]));
+            population.Add(Breed(sortedList[top], sortedList[top]));
         }
 
         for (int i = 0; i < sortedList.Count; i++)
@@ -84,17 +86,36 @@ public class PopulationManager : MonoBehaviour
     {
         var go = Instantiate(BotPrefab, transform.position, Quaternion.identity);
         Brain brain = go.GetComponent<Brain>();
-
         if (Random.Range(0,100) == 1)
         {
             brain.Init();
-            brain.dna.Mutate();
+            brain.dnaX.Mutate();
+            brain.dnaY.Mutate();
+            brain.dnaZ.Mutate();
         }
         else
         {
             brain.Init();
-            brain.dna.Combine(parent1.GetComponent<Brain>().dna, parent2.GetComponent<Brain>().dna);
+            brain.dnaX.Combine(parent1.GetComponent<Brain>().dnaX, parent2.GetComponent<Brain>().dnaX);
+            brain.dnaY.Combine(parent1.GetComponent<Brain>().dnaY, parent2.GetComponent<Brain>().dnaY);
+            brain.dnaZ.Combine(parent1.GetComponent<Brain>().dnaZ, parent2.GetComponent<Brain>().dnaZ);
+
         }
+        brain.RightArm.transform.rotation = new Quaternion(brain.dnaX.GetGene(0), brain.dnaY.GetGene(0), brain.dnaZ.GetGene(0),0);
+        brain.LeftArm.transform.rotation = new Quaternion(brain.dnaX.GetGene(0), brain.dnaY.GetGene(0), brain.dnaZ.GetGene(0), 0);
+
         return go;
+    }
+
+    private void CalculateAverage(List<GameObject> list)
+    {
+        var distance = 0f;
+
+        foreach(var go in list)
+        {
+            distance += go.GetComponent<Brain>().DistanceTraveled;
+        }
+
+        average = distance / list.Count;
     }
 }

@@ -54,7 +54,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4117463043208434}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LeftArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4985216163959590}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RightArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ Transform:
   m_GameObject: {fileID: 1228689001710334}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.49}
-  m_LocalScale: {x: 0.2375, y: 0.01, z: 1}
+  m_LocalScale: {x: 0.0762703, y: 0.11869497, z: 1}
   m_Children: []
   m_Father: {fileID: 4117463043208434}
   m_RootOrder: 0
@@ -160,7 +160,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1015851520969656}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.093257904, y: 0.8806367, z: 0.22}
+  m_LocalPosition: {x: 13.793381, y: 2.98869e-17, z: -7.9786034}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4218836965876680}
@@ -177,7 +177,7 @@ Transform:
   m_GameObject: {fileID: 1523757701326804}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.018999994, y: 0, z: 0.50192}
-  m_LocalScale: {x: 0.2375, y: 0.01, z: 1}
+  m_LocalScale: {x: 0.0762703, y: 0.11869497, z: 1}
   m_Children: []
   m_Father: {fileID: 4985216163959590}
   m_RootOrder: 0
@@ -400,7 +400,8 @@ MonoBehaviour:
   LeftArm: {fileID: 1332240084633420}
   RightArm: {fileID: 1597276667634266}
   Head: {fileID: 1425914230614820}
+  Detour: 0
   TimeInFloor: 0
   DistanceTraveled: 0
-  TimeToChange: 0.5
+  TimeToChange: 1
   TimeAlive: 0
